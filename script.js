@@ -70,26 +70,34 @@ function stopGame() {
 }
 
 function createDrop() {
-  const drop = document.createElement("div");
-  drop.className = "water-drop";
+  const createSingleDrop = (isBadDrop = false) => {
+    const drop = document.createElement("div");
+    drop.className = isBadDrop ? "water-drop bad-drop" : "water-drop";
 
-  const initialSize = 60;
-  const sizeMultiplier = Math.random() * 0.8 + 0.5;
-  const size = initialSize * sizeMultiplier;
-  drop.style.width = drop.style.height = `${size}px`;
+    const initialSize = isBadDrop ? 30 : 60;
+    const sizeMultiplier = Math.random() * 0.8 + 0.5;
+    const size = initialSize * sizeMultiplier;
+    drop.style.width = drop.style.height = `${size}px`;
 
-  const gameWidth = gameContainer.offsetWidth;
-  const xPosition = Math.random() * Math.max(1, gameWidth - size);
-  drop.style.left = `${xPosition}px`;
-  drop.style.animationDuration = `${4 + Math.random() * 1.5}s`;
+    const gameWidth = gameContainer.offsetWidth;
+    const xPosition = Math.random() * Math.max(1, gameWidth - size);
+    drop.style.left = `${xPosition}px`;
+    drop.style.animationDuration = `${3.5 + Math.random() * 1.2}s`;
 
-  gameContainer.appendChild(drop);
+    gameContainer.appendChild(drop);
 
-  drop.addEventListener("animationend", () => {
-    if (drop.isConnected) {
-      drop.remove();
-    }
-  });
+    drop.addEventListener("animationend", () => {
+      if (drop.isConnected) {
+        drop.remove();
+      }
+    });
+  };
+
+  createSingleDrop(false);
+
+  if (Math.random() < 0.25) {
+    createSingleDrop(true);
+  }
 }
 
 function moveBucket(event) {
@@ -116,7 +124,12 @@ function checkCollisions() {
     );
 
     if (overlaps) {
-      score += 1;
+      if (drop.classList.contains("bad-drop")) {
+        score = Math.max(0, score - 1);
+      } else {
+        score += 1;
+      }
+
       updateScore();
       drop.remove();
     }

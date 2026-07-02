@@ -2,6 +2,7 @@ let gameRunning = false;
 let dropMaker;
 let countdownTimer;
 let collisionTimer;
+let milestoneTimer;
 let score = 0;
 let timeLeft = 30;
 
@@ -11,6 +12,7 @@ const timeEl = document.getElementById("time");
 const startBtn = document.getElementById("start-btn");
 const stopBtn = document.getElementById("stop-btn");
 const bucket = document.getElementById("bucket");
+const milestoneNotification = document.getElementById("milestone-notification");
 const difficultySelect = document.getElementById("difficulty-select");
 
 let currentDifficulty = "Easy";
@@ -30,6 +32,28 @@ function updateScore() {
 
 function updateTimer() {
   timeEl.textContent = timeLeft;
+}
+
+function showNotification(message) {
+  if (!milestoneNotification) return;
+  milestoneNotification.textContent = message;
+  milestoneNotification.classList.add("show");
+
+  if (milestoneTimer) {
+    clearTimeout(milestoneTimer);
+  }
+
+  milestoneTimer = setTimeout(() => {
+    milestoneNotification.classList.remove("show");
+  }, 2200);
+}
+
+function checkMilestone() {
+  const milestones = [10, 15, 20, 30];
+
+  if (milestones.includes(score)) {
+    showNotification(`Congratulations! You reached ${score} points!`);
+  }
 }
 
 function clearDrops() {
@@ -146,6 +170,7 @@ function checkCollisions() {
       }
 
       updateScore();
+      checkMilestone();
       drop.remove();
     }
   });

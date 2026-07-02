@@ -11,6 +11,18 @@ const timeEl = document.getElementById("time");
 const startBtn = document.getElementById("start-btn");
 const stopBtn = document.getElementById("stop-btn");
 const bucket = document.getElementById("bucket");
+const difficultySelect = document.getElementById("difficulty-select");
+
+let currentDifficulty = "Easy";
+const difficultySettings = {
+  Easy: { dropInterval: 900, durationMin: 4.2, durationMax: 5.2 },
+  Medium: { dropInterval: 700, durationMin: 3.2, durationMax: 4.2 },
+  Hard: { dropInterval: 500, durationMin: 2.2, durationMax: 3.2 },
+};
+
+difficultySelect.addEventListener("change", (event) => {
+  currentDifficulty = event.target.value;
+});
 
 function updateScore() {
   scoreEl.textContent = score;
@@ -48,7 +60,8 @@ function startGame() {
   startBtn.disabled = true;
   startBtn.textContent = "Game Running";
 
-  dropMaker = setInterval(createDrop, 800);
+  const { dropInterval } = difficultySettings[currentDifficulty];
+  dropMaker = setInterval(createDrop, dropInterval);
   countdownTimer = setInterval(() => {
     timeLeft -= 1;
     updateTimer();
@@ -82,7 +95,9 @@ function createDrop() {
     const gameWidth = gameContainer.offsetWidth;
     const xPosition = Math.random() * Math.max(1, gameWidth - size);
     drop.style.left = `${xPosition}px`;
-    drop.style.animationDuration = `${3.5 + Math.random() * 1.2}s`;
+    const settings = difficultySettings[currentDifficulty];
+    const duration = settings.durationMin + Math.random() * (settings.durationMax - settings.durationMin);
+    drop.style.animationDuration = `${duration.toFixed(2)}s`;
 
     gameContainer.appendChild(drop);
 

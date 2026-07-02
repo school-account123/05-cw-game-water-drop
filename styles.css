@@ -26,9 +26,11 @@ Fonts:
 
 body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
+    padding: 24px 0;
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
 }
@@ -38,6 +40,19 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+}
+
+footer {
+    width: 100%;
+    max-width: 800px;
+    padding: 16px 12px;
+    text-align: center;
+    color: #555;
+}
+
+.footer-text {
+    margin: 0;
+    font-size: 14px;
 }
 
 .score-panel {
@@ -61,6 +76,21 @@ body {
 .controls {
     display: flex;
     gap: 8px;
+}
+
+.difficulty-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+#difficulty-select {
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 16px;
 }
 
 #game-container {
